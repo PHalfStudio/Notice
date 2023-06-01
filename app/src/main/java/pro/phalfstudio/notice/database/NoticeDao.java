@@ -4,11 +4,13 @@ import androidx.room.Dao;
 import androidx.room.Query;
 
 import java.util.List;
+import java.util.Map;
 
 @Dao
 public interface NoticeDao {
-    @Query("INSERT INTO localnotices (title, body, url, date, time, notice_id) VALUES (:title, :body, :url, :date, :time, :id)")
-    void insertNotice(String title , String body , String url , String date , String time , int id);
+    @Query("INSERT INTO localnotices (title, body, url, date, time, notice_id,images,append,appendMap,imagesArray) VALUES (:title, :body, :url, :date, :time, :id,:images,:append,:appendMap,:imagesArray)")
+    void insertNotice(String title , String body , String url , String date , String time , int id
+            , String[] images, String[] append, Map<String,String> appendMap,String[] imagesArray);
 
     @Query("DELETE FROM localnotices WHERE notice_id = :id")
     void deleteNoticeById(int id);
@@ -30,4 +32,10 @@ public interface NoticeDao {
 
     @Query("SELECT * FROM localnotices WHERE title LIKE :search")
     List<LocalNotices> searchNotice(String search);
+
+    @Query("SELECT status FROM localnotices WHERE notice_id = :notice_id")
+    boolean selectStatusById(String notice_id);
+
+    @Query("UPDATE localnotices SET status=:status WHERE notice_id = :notice_id")
+    void chanceStatusById(boolean status,String notice_id);
 }

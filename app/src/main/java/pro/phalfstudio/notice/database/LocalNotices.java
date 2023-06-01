@@ -11,6 +11,8 @@ import java.util.Map;
 public class LocalNotices {
     @PrimaryKey
     public int id;
+    @ColumnInfo(name = "status")
+    public boolean status;
     @ColumnInfo(name = "title")
     public String title;
     @ColumnInfo(name = "body")

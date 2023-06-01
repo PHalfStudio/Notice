@@ -1,4 +1,5 @@
 <resources>
+    <string name="main_url">https://www.dianstudios.cn:8091</string>
     <string name="app_name">Notice2.0</string>
     <string name="copyright">Copyright ©PHalfStudio</string>
     <string name="version_code">Version 2.23.5.31</string>

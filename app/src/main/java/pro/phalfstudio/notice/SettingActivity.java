@@ -1,0 +1,79 @@
+package pro.phalfstudio.notice;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.Toast;
+
+public class SettingActivity extends AppCompatActivity {
+
+    private MotionEvent event;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.WHITE);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+        Switch openDeviceNotice = findViewById(R.id.OpenDeviceNotice);
+        openDeviceNotice.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                setSwitchAnimation(event,openDeviceNotice);
+                return false;
+            }
+        });
+        //装饰性代码部分--end
+        LinearLayout userPrivate = findViewById(R.id.userPrivate);
+        userPrivate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this,WebActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+    final float thumbScale = 1.2f; // thumb 放大的比例
+    final int trackDarkColor = Color.parseColor("#0c6799"); // track 加深的颜色
+    //装饰性代码部分--start
+    public void setSwitchAnimation(MotionEvent event,Switch switchButton) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // 开始按下时，设置 thumb 放大和 track 颜色加深效果
+                ScaleAnimation scaleAnimation = new ScaleAnimation(1f, thumbScale, 1f, thumbScale,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                scaleAnimation.setDuration(200);
+                switchButton.getThumbDrawable().setAlpha(255);
+                switchButton.startAnimation(scaleAnimation);
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                // 手指抬起或取消时，恢复原始状态
+                ScaleAnimation reverseAnimation = new ScaleAnimation(thumbScale, 1f, thumbScale, 1f,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                reverseAnimation.setDuration(200);
+                switchButton.getThumbDrawable().setAlpha(255);
+                switchButton.startAnimation(reverseAnimation);
+                break;
+        }
+    }
+}

@@ -3,25 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    >
 
     <androidx.appcompat.widget.SearchView
         android:layout_margin="10dp"
-        android:id="@+id/TodayNoticeSearchView"
+        android:id="@+id/AllNoticeSearchView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingStart="5dp"
         android:background="@drawable/search_bar"
         android:queryBackground="@drawable/search_bar"
-        app:submitBackground="@drawable/search_bar"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/TodayNoticeRecyclerView"
+        android:id="@+id/AllNoticeRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

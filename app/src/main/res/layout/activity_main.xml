@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
                     android:textColor="#000000"
-                    android:text="今日" />
+                    android:text="@string/main_title_today" />
 
                 <TextView
                     android:id="@+id/AllNoticeBtn"
@@ -65,7 +65,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="-40dp"
                     android:layout_toEndOf="@+id/TodayNoticeBtn"
-                    android:text="全部通知"
+                    android:text="@string/main_title_all_notify"
                     android:textColor="#707070"
                     android:textSize="30sp" />
 
@@ -81,5 +81,8 @@
 
         </LinearLayout>
     </LinearLayout>
-
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/MainViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

@@ -1,19 +1,21 @@
 package pro.phalfstudio.notice;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
-import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.SearchView;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import pro.phalfstudio.notice.adapter.NoticePagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,22 +30,38 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.WHITE);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-
-/*        SearchView searchView = findViewById(R.id.NoticeSearchView);
-        searchView.setIconifiedByDefault(false); // 设置为false，使SearchView一开始就展开
-        searchView.setFocusable(false); // 设置为false，使SearchView不可获取焦点
-        searchView.clearFocus(); // 清除SearchView的焦点
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.setIconified(false);
-            }
-        });*/
         TextView textView1 = findViewById(R.id.TodayNoticeBtn);
         TextView textView2 = findViewById(R.id.AllNoticeBtn);
         View redLine = findViewById(R.id.red_line);
-        textView1.setOnClickListener(v -> moveRedLineAnimation(textView1, redLine, textView2));
-        textView2.setOnClickListener(v -> moveRedLineAnimation(textView2, redLine, textView1));
+        ViewPager2 viewPager = findViewById(R.id.MainViewPager);
+        viewPager.setAdapter(new NoticePagerAdapter(this,getLifecycle()));
+        textView1.setOnClickListener(v -> {
+            moveRedLineAnimation(textView1, redLine, textView2);
+            viewPager.setCurrentItem(0);
+        });
+        textView2.setOnClickListener(v -> {
+            moveRedLineAnimation(textView2, redLine, textView1);
+            viewPager.setCurrentItem(1);
+        });
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if(position == 0){
+                    moveRedLineAnimation(textView1, redLine, textView2);
+                }else{
+                    moveRedLineAnimation(textView2, redLine, textView1);
+                }
+            }
+        });
+        ImageButton setting = findViewById(R.id.AppSetting);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent setting = new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(setting);
+            }
+        });
     }
 
     private void moveRedLineAnimation(final TextView targetView, final View redLine, final TextView noActiveView) {

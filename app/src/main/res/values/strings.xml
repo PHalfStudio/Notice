@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Notice2.0</string>
+    <string name="copyright">Copyright ©PHalfStudio</string>
+    <string name="version_code">Version 2.23.5.31</string>
+    <string name="check_update">检查更新</string>
+    <string name="user_private">隐私政策</string>
+    <string name="run_to_america">留洋模式</string>
+    <string name="run_to_america_details">链接美国服务器获取新通知</string>
+    <string name="open_service_details">有新学校通知时在设备上发送通知提醒</string>
+    <string name="open_service">开启通知服务</string>
+    <string name="setting_little_title_get_notice">通知获取</string>
+    <string name="setting_little_title_other">其他</string>
+    <string name="setting_title">Notice·设置</string>
+    <string name="web_user_private">隐私政策</string>
+    <string name="main_title_today">今日</string>
+    <string name="main_title_all_notify">全部通知</string>
 </resources>

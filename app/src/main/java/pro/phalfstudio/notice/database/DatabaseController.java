@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import cn.hutool.json.JSON;
-import cn.hutool.json.JSONObject;
+import com.google.gson.JsonObject;
 import cn.hutool.json.JSONUtil;
 import pro.phalfstudio.notice.bean.NetBackNotices;
 
@@ -32,13 +32,14 @@ public class DatabaseController {
                     time = "00:00";
                 }
                 int id = record.getId();
-//                String images = record.getImages();
-//                String append = record.getAppend();
-//                JSONObject appendMap = record.getAppendMap();
-//                String[] imagesArray = record.getImagesArray();
+                String images = record.getImages();
+                String append = record.getAppend();
+                JsonObject appendMap = record.getAppendMap();
+                String[] imagesArray = record.getImagesArray();
                 LocalNotices testNotice = database.noticeDao().findNoticeById(id);
                 if(testNotice == null){
-                    database.noticeDao().insertNotice(false,title, body, url, date, time, id , "", "", "", "");
+                    database.noticeDao().insertNotice(false,title, body, url, date, time, id
+                            , JSONUtil.toJsonStr(images), JSONUtil.toJsonStr(append), JSONUtil.toJsonStr(appendMap), JSONUtil.toJsonStr(imagesArray));
                 }
                 testID.set(id);
             }

@@ -1,10 +1,8 @@
 package pro.phalfstudio.notice.bean;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONObjectIter;
 
 public class NetBackNotices {
     @SerializedName("code")
@@ -171,17 +169,17 @@ public class NetBackNotices {
         @SerializedName("url")
         private String url;
 
-//        @SerializedName("images")
-//        private String images;
-//
-//        @SerializedName("append")
-//        private String append;
-//
-//        @SerializedName("appendMap")
-//        private JSONObject appendMap;
-//
-//        @SerializedName("imagesArray")
-//        private String[] imagesArray;
+        @SerializedName("images")
+        private String images;
+
+        @SerializedName("append")
+        private String append;
+
+        @SerializedName("appendMap")
+        private JsonObject appendMap;
+
+        @SerializedName("imagesArray")
+        private String[] imagesArray;
 
         public int getId() {
             return id;
@@ -231,36 +229,36 @@ public class NetBackNotices {
             this.url = url;
         }
 
-//        public String getImages() {
-//            return images;
-//        }
-//
-//        public void setImages(String images) {
-//            this.images = images;
-//        }
-//
-//        public String getAppend() {
-//            return append;
-//        }
-//
-//        public void setAppend(String append) {
-//            this.append = append;
-//        }
-//
-//        public JSONObject getAppendMap() {
-//            return appendMap;
-//        }
-//
-//        public void setAppendMap(JSONObject appendMap) {
-//            this.appendMap = appendMap;
-//        }
-//
-//        public String[] getImagesArray() {
-//            return imagesArray;
-//        }
-//
-//        public void setImagesArray(String[] imagesArray) {
-//            this.imagesArray = imagesArray;
-//        }
+        public String getImages() {
+            return images;
+        }
+
+        public void setImages(String images) {
+            this.images = images;
+        }
+
+        public String getAppend() {
+            return append;
+        }
+
+        public void setAppend(String append) {
+            this.append = append;
+        }
+
+        public JsonObject getAppendMap() {
+            return appendMap;
+        }
+
+        public void setAppendMap(JsonObject appendMap) {
+            this.appendMap = appendMap;
+        }
+
+        public String[] getImagesArray() {
+            return imagesArray;
+        }
+
+        public void setImagesArray(String[] imagesArray) {
+            this.imagesArray = imagesArray;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package pro.phalfstudio.notice.database;
+package pro.phalfstudio.notice.controller;
 
 import android.content.Context;
 import java.util.List;
@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.google.gson.JsonObject;
 import cn.hutool.json.JSONUtil;
 import pro.phalfstudio.notice.bean.NetBackNotices;
+import pro.phalfstudio.notice.database.LocalNotices;
+import pro.phalfstudio.notice.database.NoticesDatabase;
 
 public class DatabaseController {
     NoticesDatabase database;

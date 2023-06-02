@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import pro.phalfstudio.notice.adapter.NoticePagerAdapter;
-import pro.phalfstudio.notice.database.DatabaseController;
+import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.net.LoadNetNotices;
 
 public class MainActivity extends AppCompatActivity {

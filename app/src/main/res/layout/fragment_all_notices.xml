@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="vertical">
@@ -23,7 +24,7 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <pro.phalfstudio.notice.NoticeRecyclerView
         android:id="@+id/AllNoticeRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

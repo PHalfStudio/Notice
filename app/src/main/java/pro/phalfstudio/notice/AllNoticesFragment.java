@@ -1,6 +1,8 @@
 package pro.phalfstudio.notice;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -21,9 +24,10 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import pro.phalfstudio.notice.adapter.NoticeRecyclerViewAdapter;
-import pro.phalfstudio.notice.database.DatabaseController;
+import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.database.LocalNotices;
 import pro.phalfstudio.notice.net.LoadNetNotices;
+import pro.phalfstudio.notice.utils.DisplayUtil;
 
 public class AllNoticesFragment extends Fragment {
     NoticeRecyclerViewAdapter adapter;
@@ -32,7 +36,10 @@ public class AllNoticesFragment extends Fragment {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     private SearchView searchView;
-    private RecyclerView recyclerView;
+    private View searchBar;
+    private NoticeRecyclerView recyclerView;
+    int mFirstY, mCurrentY, marginTop;
+    boolean direction;
     public static AllNoticesFragment newInstance() {
         return new AllNoticesFragment();
     }
@@ -58,6 +65,7 @@ public class AllNoticesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         refreshNotices();
+        initView();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -85,4 +93,97 @@ public class AllNoticesFragment extends Fragment {
         localNotices.addAll(newLocal);
         adapter.notifyDataSetChanged();
     }
+    private void initView() {
+        marginTop = DisplayUtil.dip2px(getContext(), 50);
+        searchBar = getView().findViewById(R.id.searchLayout);
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            private float mFirstY;
+            private float mCurrentY;
+            private boolean direction;
+            private boolean isAnimateRunning = false;
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mFirstY = motionEvent.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mCurrentY = motionEvent.getY();
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) searchBar.getLayoutParams();
+
+                        if (mCurrentY - mFirstY > 0) {
+                            direction = false; // 向下滑动
+                        } else {
+                            direction = true; // 向上滑动
+                        }
+
+                        if (direction) {
+                            if (layoutParams.topMargin > -marginTop) {
+                                layoutParams.topMargin += mCurrentY - mFirstY;
+                                if (layoutParams.topMargin < -marginTop) {
+                                    layoutParams.topMargin = -marginTop;
+                                }
+                                searchBar.requestLayout();
+                            }
+                        } else {
+                            if (layoutParams.topMargin < 0) {
+                                layoutParams.topMargin += mCurrentY - mFirstY;
+                                if (layoutParams.topMargin > 0) {
+                                    layoutParams.topMargin = 0;
+                                }
+                                searchBar.requestLayout();
+                            }
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (direction && !isAnimateRunning) {
+                            // 向上滑动时，执行动画将搜索框显示出来
+                            animateSearchBar(0);
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void animateSearchBar(final int targetMargin) {
+        final boolean[] isAnimateRunning = new boolean[1];
+        final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) searchBar.getLayoutParams();
+        ValueAnimator animator = ValueAnimator.ofInt(layoutParams.topMargin, targetMargin);
+        animator.setDuration(300);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                layoutParams.topMargin = (int) valueAnimator.getAnimatedValue();
+                searchBar.requestLayout();
+            }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                isAnimateRunning[0] = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                isAnimateRunning[0] = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                isAnimateRunning[0] = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+        animator.start();
+    }
+
 }

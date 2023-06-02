@@ -14,13 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import pro.phalfstudio.notice.adapter.NoticeRecyclerViewAdapter;
 import pro.phalfstudio.notice.database.DatabaseController;
+import pro.phalfstudio.notice.database.LocalNotices;
 import pro.phalfstudio.notice.net.LoadNetNotices;
 
 public class AllNoticesFragment extends Fragment {
     NoticeRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
+    List<LocalNotices> localNotices;
+
     public static AllNoticesFragment newInstance() {
         return new AllNoticesFragment();
     }
@@ -37,12 +42,12 @@ public class AllNoticesFragment extends Fragment {
         String url = getString(R.string.main_url);
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
         DatabaseController databaseController = new DatabaseController(getContext());
-        if (databaseController.showAllNotices() == null) {
-            loadNetNotices.loadNotice(1);
-        }
+        loadNetNotices.loadNotice(1);
+        localNotices = databaseController.showAllNotices();
         recyclerView = view.findViewById(R.id.AllNoticeRecyclerView);
-        adapter = new NoticeRecyclerViewAdapter(getContext(), databaseController.showAllNotices());
+        adapter = new NoticeRecyclerViewAdapter(getContext(), localNotices);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

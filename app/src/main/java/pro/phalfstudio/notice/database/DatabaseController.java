@@ -1,13 +1,15 @@
 package pro.phalfstudio.notice.database;
 
 import android.content.Context;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import pro.phalfstudio.notice.bean.NetBackNotices;
 
 public class DatabaseController {
@@ -26,12 +28,18 @@ public class DatabaseController {
                 String url = record.getUrl();
                 String date = record.getDate();
                 String time = record.getTime();
+                if(time.equals("")){
+                    time = "00:00";
+                }
                 int id = record.getId();
-                String[] images = record.getImages();
-                String[] append = record.getAppend();
-                Map<String,String> appendMap = record.getAppendMap();
-                String[] imagesArray = record.getImagesArray();
-                database.noticeDao().insertNotice(title, body, url, date, time, id ,images, append, appendMap, imagesArray);
+//                String images = record.getImages();
+//                String append = record.getAppend();
+//                JSONObject appendMap = record.getAppendMap();
+//                String[] imagesArray = record.getImagesArray();
+                LocalNotices testNotice = database.noticeDao().findNoticeById(id);
+                if(testNotice == null){
+                    database.noticeDao().insertNotice(false,title, body, url, date, time, id , "", "", "", "");
+                }
                 testID.set(id);
             }
         });
@@ -45,7 +53,7 @@ public class DatabaseController {
     }
 
     public List<LocalNotices> showAllNotices() {
-        AtomicReference<List<LocalNotices>> cache = null;
+        AtomicReference<List<LocalNotices>> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().showAllNotices());
         });
@@ -59,7 +67,7 @@ public class DatabaseController {
     }
 
     public int allNoticeNum() {
-        AtomicReference<Integer> cache = null;
+        AtomicReference<Integer> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().allNoticeNum());
         });
@@ -73,7 +81,7 @@ public class DatabaseController {
     }
 
     public List<LocalNotices> searchNotice(String search) {
-        AtomicReference<List<LocalNotices>> cache = null;
+        AtomicReference<List<LocalNotices>> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().searchNotice("%"+search+"%"));
         });
@@ -81,7 +89,7 @@ public class DatabaseController {
     }
 
     public boolean selectStatusById(String notice_id) {
-        AtomicBoolean cacheBoolean = null;
+        AtomicBoolean cacheBoolean = new AtomicBoolean();
         Thread a = new Thread(() -> {
             cacheBoolean.set(database.noticeDao().selectStatusById(notice_id));
         });
@@ -101,7 +109,7 @@ public class DatabaseController {
     }
 
     public LocalNotices findNoticeById(int id) {
-        AtomicReference<LocalNotices> cache = null;
+        AtomicReference<LocalNotices> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().findNoticeById(id));
         });

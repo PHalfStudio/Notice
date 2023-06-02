@@ -65,6 +65,7 @@ public class LoadNetNotices {
 
             @Override
             public void onFailure(Call<NetBackNotices> call, Throwable t) {
+                System.out.println(t.getMessage());
                 Pattern pattern = Pattern.compile("^.{6}");
                 Matcher matcher = pattern.matcher(t.getMessage());
                 if (matcher.find()) {

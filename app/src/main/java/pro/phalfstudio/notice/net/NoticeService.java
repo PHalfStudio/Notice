@@ -10,12 +10,12 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface NoticeService {
-    @POST("/api/notices")
+    @POST("api/notices")
     Call<NetBackNotices> getNotice(@Body RequestBody request);
 
-    @GET("/api/notices")
+    @GET("api/notices")
     Call<NetBackOneNotice> getNewOneNotice();
 
-    @POST("/api/notices")
+    @POST("api/notices")
     Call<NetBackNotices> searchNotice(@Body RequestBody request);
 }

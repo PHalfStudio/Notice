@@ -25,6 +25,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ import pro.phalfstudio.notice.utils.DisplayUtil;
 public class AllNoticesFragment extends Fragment {
     private static final TimeInterpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
     NoticeRecyclerViewAdapter adapter;
+    private NoticeRecyclerView recyclerView;
     List<LocalNotices> localNotices;
     List<LocalNotices> newLocal;
     SharedPreferences sharedPreferences;
@@ -44,7 +46,6 @@ public class AllNoticesFragment extends Fragment {
     private SearchView searchView;
     private View searchBar;
     private static final int ANIMATION_DURATION = 300; // 持续时间，单位为毫秒
-    private NoticeRecyclerView recyclerView;
     int marginTop;
     boolean isSearchNow = false;
 
@@ -67,9 +68,9 @@ public class AllNoticesFragment extends Fragment {
         DatabaseController databaseController = new DatabaseController(getContext());
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
         localNotices = databaseController.getAllNotices();
-        recyclerView = view.findViewById(R.id.AllNoticeRecyclerView);
         searchBar = view.findViewById(R.id.searchLayout);
         searchView = view.findViewById(R.id.AllNoticeSearchView);
+        recyclerView = view.findViewById(R.id.AllNoticeRecyclerView);
         adapter = new NoticeRecyclerViewAdapter(getContext(), localNotices);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -124,6 +125,9 @@ public class AllNoticesFragment extends Fragment {
     public void refreshNotices(boolean search, String searchString) {
         if (search) {
             newLocal = new DatabaseController(getContext()).searchNotice(searchString);
+            if(newLocal.size() == 0){
+                Toast.makeText(getContext(), "没有找到相关内容", Toast.LENGTH_SHORT).show();
+            }
         } else {
             newLocal = new DatabaseController(getContext()).getAllNotices();
         }

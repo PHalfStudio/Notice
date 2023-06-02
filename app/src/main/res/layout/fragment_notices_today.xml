@@ -6,18 +6,7 @@
     android:orientation="vertical"
     android:background="#ffffff"
     >
-
-    <androidx.appcompat.widget.SearchView
-        android:layout_margin="10dp"
-        android:id="@+id/TodayNoticeSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingStart="5dp"
-        android:background="@drawable/search_bar"
-        android:queryBackground="@drawable/search_bar"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
+    <pro.phalfstudio.notice.NoticeRecyclerView
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/TodayNoticeRecyclerView"

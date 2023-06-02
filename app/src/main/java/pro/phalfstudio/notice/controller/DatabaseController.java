@@ -128,4 +128,18 @@ public class DatabaseController {
         }
         return cache.get();
     }
+
+    public List<LocalNotices> findNoticeByDate(String date){
+        AtomicReference<List<LocalNotices>> cache = new AtomicReference<>();
+        Thread a = new Thread(() -> {
+            cache.set(database.noticeDao().findNoticeByDate(date));
+        });
+        a.start();
+        try {
+            a.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return cache.get();
+    }
 }

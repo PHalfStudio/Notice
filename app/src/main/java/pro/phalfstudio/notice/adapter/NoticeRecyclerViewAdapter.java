@@ -1,6 +1,8 @@
 package pro.phalfstudio.notice.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import pro.phalfstudio.notice.DetailsActivity;
+import pro.phalfstudio.notice.MainActivity;
 import pro.phalfstudio.notice.R;
 import pro.phalfstudio.notice.database.LocalNotices;
 import pro.phalfstudio.notice.utils.TimeUtil;
@@ -36,12 +40,25 @@ public class NoticeRecyclerViewAdapter extends RecyclerView.Adapter<NoticeRecycl
         LocalNotices notice = localNotices.get(position);
         if(notice!=null) {
             String title = notice.title;
+            int id = notice.noticeID;
+            String url = notice.url;
             String dateAndTime = notice.date + "/" + notice.time;
             holder.numberTextView.setText(String.valueOf(position + 1));
             holder.numberTextView.setText(String.valueOf(position + 1));
             holder.titleTextView.setText(title);
             holder.partBodyTextView.setText(notice.body);
             holder.timeTextView.setText(TimeUtil.formatTime(dateAndTime));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("noticeID",id);
+                    bundle.putString("noticeUrl",url);
+                    Intent intent = new Intent(context, DetailsActivity.class);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

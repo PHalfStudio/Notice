@@ -2,12 +2,10 @@ package pro.phalfstudio.notice.database;
 
 import android.content.Context;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import cn.hutool.json.JSON;
 import com.google.gson.JsonObject;
 import cn.hutool.json.JSONUtil;
 import pro.phalfstudio.notice.bean.NetBackNotices;
@@ -53,7 +51,7 @@ public class DatabaseController {
         return findNoticeById(testID.get()) != null;
     }
 
-    public List<LocalNotices> showAllNotices() {
+    public List<LocalNotices> getAllNotices() {
         AtomicReference<List<LocalNotices>> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().showAllNotices());
@@ -67,7 +65,7 @@ public class DatabaseController {
         return cache.get();
     }
 
-    public int allNoticeNum() {
+    public int getCurrentNumber() {
         AtomicReference<Integer> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().allNoticeNum());
@@ -78,7 +76,7 @@ public class DatabaseController {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return cache.get();
+        return cache.get()/100;
     }
 
     public List<LocalNotices> searchNotice(String search) {

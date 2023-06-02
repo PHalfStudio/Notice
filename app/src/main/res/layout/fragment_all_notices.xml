@@ -3,26 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff"
-    >
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.SearchView
-        android:layout_margin="10dp"
-        android:id="@+id/AllNoticeSearchView"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingStart="5dp"
-        android:background="@drawable/search_bar"
-        android:queryBackground="@drawable/search_bar"
-        />
+        android:orientation="vertical">
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/AllNoticeSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/search_bar"
+            android:paddingStart="5dp"
+            android:queryBackground="@drawable/search_bar" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:id="@+id/AllNoticeRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
 
 </LinearLayout>

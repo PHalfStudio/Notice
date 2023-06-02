@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import pro.phalfstudio.notice.adapter.NoticePagerAdapter;
+import pro.phalfstudio.notice.database.DatabaseController;
+import pro.phalfstudio.notice.net.LoadNetNotices;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.WHITE);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+        String url = getString(R.string.main_url);
+        DatabaseController databaseController = new DatabaseController(getBaseContext());
+        LoadNetNotices loadNetNotices = new LoadNetNotices(url, getBaseContext());
+        if(databaseController.getAllNotices().size() == 0){
+            loadNetNotices.loadNotice(1);
         }
         TextView textView1 = findViewById(R.id.TodayNoticeBtn);
         TextView textView2 = findViewById(R.id.AllNoticeBtn);

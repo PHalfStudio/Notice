@@ -15,20 +15,21 @@ public class TimeUtil {
     private static final long ONE_MINUTE = 60 * 1000;
     private static final long ONE_HOUR = 60 * ONE_MINUTE;
     private static final long ONE_DAY = 24 * ONE_HOUR;
+    private static final long ONE_MONTH = 30 * ONE_DAY;
+    private static final long ONE_YEAR = 12 * ONE_MONTH;
+    private static final long HAlF_YEAR = 6 * ONE_MONTH;
 
     public static String formatTime(String dateTimeString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd/HH:mm", Locale.getDefault());
         try {
             Calendar calendar = Calendar.getInstance();
+            int NoticeYear = Integer.parseInt(dateTimeString.substring(0, 4));
+            int NowYear = calendar.get(Calendar.YEAR);
             Date date = format.parse(dateTimeString);
             long currentTime = calendar.getTimeInMillis();
             calendar.setTime(date);
             long targetTime = calendar.getTimeInMillis();
-            System.out.println(format.format(currentTime));
-            System.out.println(format.format(targetTime));
-
             long timeDifference = currentTime - targetTime;
-
             if (timeDifference < ONE_HOUR) {
                 long minutes = timeDifference / ONE_MINUTE;
                 return minutes + "分钟前";
@@ -40,11 +41,11 @@ public class TimeUtil {
                 int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 return "昨天 " + formatTimeDigit(hourOfDay) + ":" + formatTimeDigit(minute);
-            } else if (timeDifference > 2 * ONE_DAY) {
+            } else if (timeDifference > 2 * ONE_DAY & NoticeYear == NowYear) {
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 return month + "月" + dayOfMonth + "日";
-            }else {
+            }else if(NoticeYear < NowYear){
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);

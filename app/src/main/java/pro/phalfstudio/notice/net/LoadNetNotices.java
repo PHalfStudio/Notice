@@ -1,6 +1,7 @@
 package pro.phalfstudio.notice.net;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -23,6 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoadNetNotices {
     Retrofit retrofit;
     NoticeService noticeService;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     Call<NetBackNotices> getNotice;
     List<NetBackNotices.Record> records;
     DatabaseController databaseController;
@@ -36,6 +39,8 @@ public class LoadNetNotices {
                 .build();
         noticeService = retrofit.create(NoticeService.class);
         databaseController = new DatabaseController(context);
+        sharedPreferences = context.getSharedPreferences("notice", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public void loadNotice(int currentPage){
@@ -56,6 +61,8 @@ public class LoadNetNotices {
             public void onResponse(Call<NetBackNotices> call, Response<NetBackNotices> response) {
                 if(response.isSuccessful()){
                     NetBackNotices notices = response.body();
+                    editor.putInt("totalPages", notices.getData().getPages());
+                    editor.commit();
                     records = notices.getData().getRecords();
                     if(databaseController.addNotices(records)){
                         Toast.makeText(Allcontext, "数据加载成功", Toast.LENGTH_SHORT).show();

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    >
+    android:layout_marginTop="20dp">
 
     <LinearLayout
-        android:layout_width="30dp"
+        android:layout_width="35dp"
         android:layout_height="80dp"
         android:orientation="horizontal">
 
@@ -34,31 +34,40 @@
         android:layout_height="80dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="horizontal"
-            >
+            android:layout_height="25dp">
+
             <TextView
                 android:id="@+id/NoticeTitleTextview"
-                android:layout_width="250dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:textColor="#000000"
                 android:maxLines="1"
-                android:maxWidth="280dp"
+                android:maxWidth="260dp"
                 android:ellipsize="end"
                 android:textStyle="bold"
                 android:textSize="17sp"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/NoticeTimeTextView" />
+
             <TextView
                 android:id="@+id/NoticeTimeTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="#888888"
                 android:textSize="13sp"
                 android:gravity="center_vertical|end"
-                />
-        </LinearLayout>
+                app:layout_constraintStart_toEndOf="@+id/NoticeTitleTextview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

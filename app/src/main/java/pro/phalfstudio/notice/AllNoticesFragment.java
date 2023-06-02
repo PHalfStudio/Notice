@@ -1,6 +1,9 @@
 package pro.phalfstudio.notice;
 
+import static android.view.FrameMetrics.ANIMATION_DURATION;
+
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -32,6 +35,7 @@ import pro.phalfstudio.notice.net.LoadNetNotices;
 import pro.phalfstudio.notice.utils.DisplayUtil;
 
 public class AllNoticesFragment extends Fragment {
+    private static final TimeInterpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
     NoticeRecyclerViewAdapter adapter;
     List<LocalNotices> localNotices;
     List<LocalNotices> newLocal;
@@ -39,11 +43,10 @@ public class AllNoticesFragment extends Fragment {
     SharedPreferences.Editor editor;
     private SearchView searchView;
     private View searchBar;
+    private static final int ANIMATION_DURATION = 300; // 持续时间，单位为毫秒
     private NoticeRecyclerView recyclerView;
     int marginTop;
     boolean isSearchNow = false;
-    private static final int ANIMATION_DURATION = 300;
-    private static final Interpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
 
     public static AllNoticesFragment newInstance() {
         return new AllNoticesFragment();
@@ -65,6 +68,7 @@ public class AllNoticesFragment extends Fragment {
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
         localNotices = databaseController.getAllNotices();
         recyclerView = view.findViewById(R.id.AllNoticeRecyclerView);
+        searchBar = view.findViewById(R.id.searchLayout);
         searchView = view.findViewById(R.id.AllNoticeSearchView);
         adapter = new NoticeRecyclerViewAdapter(getContext(), localNotices);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -96,7 +100,6 @@ public class AllNoticesFragment extends Fragment {
             }
         });
         refreshNotices(false, "");
-        initView();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -113,12 +116,6 @@ public class AllNoticesFragment extends Fragment {
                     currentPage++;
                     loadNetNotices.loadNotice(currentPage);
                     refreshNotices(false, "");
-                } else if (isSearchNow) {
-                    if (lastVisibleItemPosition == totalItemCount - 1) {
-                        hideSearchBar();
-                    } else {
-                        showSearchBar();
-                    }
                 }
             }
         });
@@ -135,163 +132,4 @@ public class AllNoticesFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void initView() {
-        marginTop = DisplayUtil.dip2px(getContext(), 50);
-        searchBar = getView().findViewById(R.id.searchLayout);
-
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            private float mFirstY;
-            private float mCurrentY;
-            private boolean direction;
-            private boolean isAnimateRunning = false;
-
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mFirstY = motionEvent.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        mCurrentY = motionEvent.getY();
-                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) searchBar.getLayoutParams();
-
-                        if (mCurrentY - mFirstY > 0) {
-                            direction = false; // 向下滑动
-                        } else {
-                            direction = true; // 向上滑动
-                        }
-
-                        if (direction) {
-                            if (layoutParams.topMargin > -marginTop) {
-                                layoutParams.topMargin += mCurrentY - mFirstY;
-                                if (layoutParams.topMargin < -marginTop) {
-                                    layoutParams.topMargin = -marginTop;
-                                }
-                                searchBar.requestLayout();
-                            }
-                        } else {
-                            if (layoutParams.topMargin < 0) {
-                                layoutParams.topMargin += mCurrentY - mFirstY;
-                                if (layoutParams.topMargin > 0) {
-                                    layoutParams.topMargin = 0;
-                                }
-                                searchBar.requestLayout();
-                            }
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (direction && !isAnimateRunning) {
-                            // 向上滑动时，执行动画将搜索框显示出来
-                            animateSearchBar(0);
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
-    }
-
-    private void animateSearchBar(final int targetMargin) {
-        final boolean[] isAnimateRunning = new boolean[1];
-        final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) searchBar.getLayoutParams();
-        ValueAnimator animator = ValueAnimator.ofInt(layoutParams.topMargin, targetMargin);
-        animator.setDuration(300);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.topMargin = (int) valueAnimator.getAnimatedValue();
-                searchBar.requestLayout();
-            }
-        });
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                isAnimateRunning[0] = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                isAnimateRunning[0] = false;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                isAnimateRunning[0] = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-            }
-        });
-        animator.start();
-    }
-
-    private void hideSearchBar() {
-        if (searchBar.getVisibility() == View.VISIBLE) {
-            ValueAnimator animator = createAnimator(searchBar.getHeight(), 0);
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    searchBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-            animator.start();
-        }
-    }
-
-    private void showSearchBar() {
-        if (searchBar.getVisibility() != View.VISIBLE) {
-            searchBar.setVisibility(View.VISIBLE);
-            ValueAnimator animator = createAnimator(0, searchBar.getMeasuredHeight());
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    searchBar.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-            animator.start();
-        }
-    }
-
-    private ValueAnimator createAnimator(int startValue, int endValue) {
-        ValueAnimator animator = ValueAnimator.ofInt(startValue, endValue);
-        animator.setDuration(ANIMATION_DURATION);
-        animator.setInterpolator(ANIMATION_INTERPOLATOR);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int value = (int) animation.getAnimatedValue();
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) searchBar.getLayoutParams();
-                layoutParams.height = value;
-                searchBar.setLayoutParams(layoutParams);
-            }
-        });
-        return animator;
-    }
 }

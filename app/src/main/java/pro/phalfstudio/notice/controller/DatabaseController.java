@@ -86,6 +86,12 @@ public class DatabaseController {
         Thread a = new Thread(() -> {
             cache.set(database.noticeDao().searchNotice("%"+search+"%"));
         });
+        a.start();
+        try {
+            a.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return cache.get();
     }
 

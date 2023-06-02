@@ -20,6 +20,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/search_bar"
             android:paddingStart="5dp"
+            android:showDividers="none"
             android:queryBackground="@drawable/search_bar" />
 
     </LinearLayout>

@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,13 +37,14 @@ import pro.phalfstudio.notice.net.LoadNetNotices;
 import pro.phalfstudio.notice.utils.DisplayUtil;
 
 public class AllNoticesFragment extends Fragment {
-    private static final TimeInterpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
     NoticeRecyclerViewAdapter adapter;
-    private NoticeRecyclerView recyclerView;
     List<LocalNotices> localNotices;
     List<LocalNotices> newLocal;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    SwipeRefreshLayout swipeRefreshLayout;
+    private NoticeRecyclerView recyclerView;
+    private static final TimeInterpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
     private SearchView searchView;
     private View searchBar;
     private static final int ANIMATION_DURATION = 300; // 持续时间，单位为毫秒
@@ -115,9 +117,19 @@ public class AllNoticesFragment extends Fragment {
                 if (lastVisibleItemPosition == totalItemCount - 1 && currentPage < totalPages && !isSearchNow) {
                     //加载下一页
                     currentPage++;
-                    loadNetNotices.loadNotice(currentPage);
+                    loadNetNotices.loadNotice(currentPage,false);
                     refreshNotices(false, "");
                 }
+            }
+        });
+        swipeRefreshLayout = view.findViewById(R.id.allSwipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                String url = getString(R.string.main_url);
+                LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
+                loadNetNotices.loadNotice(1,true);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

@@ -4,5 +4,8 @@
         <item name="android:thumb">@drawable/miui_switch_thumb</item>
         <item name="android:track">@drawable/miui_switch_track</item>
     </style>
+    <style name="CustomButtonStyle" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@drawable/miui_button</item>
+    </style>
 
 </resources>

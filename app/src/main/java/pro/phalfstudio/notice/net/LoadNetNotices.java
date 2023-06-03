@@ -14,6 +14,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pro.phalfstudio.notice.bean.NetBackNotices;
 import pro.phalfstudio.notice.controller.DatabaseController;
+import pro.phalfstudio.notice.database.LocalNotices;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,16 +43,27 @@ public class LoadNetNotices {
         editor = sharedPreferences.edit();
     }
 
-    public void loadNotice(int currentPage){
+    public void loadNotice(int currentPage , boolean isRefresh){
         String current = String.valueOf(currentPage);
         JSONObject json = new JSONObject();
-        try {
-            JSONObject page = new JSONObject();
-            page.put("current", current);
-            page.put("size", "100");
-            json.put("page", page);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(isRefresh){
+            try {
+                JSONObject page = new JSONObject();
+                page.put("current", "1");
+                page.put("size", "100");
+                json.put("page", page);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                JSONObject page = new JSONObject();
+                page.put("current", current);
+                page.put("size", "100");
+                json.put("page", page);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json.toString());
         Call<NetBackNotices> getNotice = noticeService.getNotice(requestBody);
@@ -63,8 +75,24 @@ public class LoadNetNotices {
                     editor.putInt("totalPages", notices.getData().getPages());
                     editor.commit();
                     records = notices.getData().getRecords();
-                    if(databaseController.addNotices(records)){
-                        Toast.makeText(Allcontext, "数据加载成功", Toast.LENGTH_SHORT).show();
+                    if(isRefresh){
+                        int refreshNum = 0;
+                        List<LocalNotices> localNotices = databaseController.getAllNotices();
+                        for (int i = 0;; i++) {
+                            if(records.get(i).getId() > localNotices.get(0).noticeID){
+                                databaseController.insertNotice(records.get(i));
+                                refreshNum++;
+                            }else{
+                                break;
+                            }
+                        }
+                        if(refreshNum > 0){
+                            Toast.makeText(Allcontext, "奇怪的通知增加了"+refreshNum+"条", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        if(databaseController.addNotices(records)){
+                            Toast.makeText(Allcontext, "数据加载成功", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="vertical">
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/AllNoticeSearchView"
             android:layout_width="match_parent"
@@ -24,13 +25,22 @@
             android:queryBackground="@drawable/search_bar" />
 
     </LinearLayout>
-
-    <pro.phalfstudio.notice.NoticeRecyclerView
-        android:id="@+id/AllNoticeRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/allSwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        >
+
+        <pro.phalfstudio.notice.NoticeRecyclerView
+            android:id="@+id/AllNoticeRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 </LinearLayout>

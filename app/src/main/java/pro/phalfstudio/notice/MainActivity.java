@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
         String url = getString(R.string.main_url);
         DatabaseController databaseController = new DatabaseController(getBaseContext());
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getBaseContext());
+        loadNetNotices.loadNotice(1,true);
         if(databaseController.getAllNotices().size() == 0){
-            loadNetNotices.loadNotice(1);
+            loadNetNotices.loadNotice(1,false);
         }
         TextView textView1 = findViewById(R.id.TodayNoticeBtn);
         TextView textView2 = findViewById(R.id.AllNoticeBtn);

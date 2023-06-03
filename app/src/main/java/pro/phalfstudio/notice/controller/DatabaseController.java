@@ -19,6 +19,36 @@ public class DatabaseController {
         database = NoticesDatabase.getDatabase(context);
     }
 
+    public void insertNotice(NetBackNotices.Record record){
+        Thread a = new Thread(()->{
+            String title = record.getTitle();
+            String body = record.getBody();
+            String url = record.getUrl();
+            String date = record.getDate();
+            String time = record.getTime();
+            if(time.equals("")){
+                time = "00:00";
+            }
+            int id = record.getId();
+            String images = record.getImages();
+            String append = record.getAppend();
+            JsonObject appendMap = record.getAppendMap();
+            String[] imagesArray = record.getImagesArray();
+            LocalNotices testNotice = database.noticeDao().findNoticeById(id);
+            if(testNotice == null){
+                database.noticeDao().insertNotice(false,title, body, url, date, time, id
+                        , JSONUtil.toJsonStr(images), JSONUtil.toJsonStr(append), JSONUtil.toJsonStr(appendMap), JSONUtil.toJsonStr(imagesArray));
+
+            }
+        });
+        a.start();
+        try {
+            a.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean addNotices(List<NetBackNotices.Record> records){
         AtomicInteger testID = new AtomicInteger();
         Thread a = new Thread(() -> {

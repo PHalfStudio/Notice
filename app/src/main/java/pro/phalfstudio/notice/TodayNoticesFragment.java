@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,14 @@ import java.util.List;
 import pro.phalfstudio.notice.adapter.NoticeRecyclerViewAdapter;
 import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.database.LocalNotices;
+import pro.phalfstudio.notice.net.LoadNetNotices;
 import pro.phalfstudio.notice.utils.TimeUtil;
 
 public class TodayNoticesFragment extends Fragment {
     private List<LocalNotices> localNotices;
     NoticeRecyclerViewAdapter adapter;
     private NoticeRecyclerView recyclerView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public static TodayNoticesFragment newInstance() {
         return new TodayNoticesFragment();
@@ -42,5 +45,15 @@ public class TodayNoticesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.TodayNoticeRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        swipeRefreshLayout = view.findViewById(R.id.todaySwipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                String url = getString(R.string.main_url);
+                LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
+                loadNetNotices.loadNotice(1,true);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 }

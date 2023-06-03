@@ -9,9 +9,6 @@ public class TimeUtil {
     private static final long ONE_MINUTE = 60 * 1000;
     private static final long ONE_HOUR = 60 * ONE_MINUTE;
     private static final long ONE_DAY = 24 * ONE_HOUR;
-    private static final long ONE_MONTH = 30 * ONE_DAY;
-    private static final long ONE_YEAR = 12 * ONE_MONTH;
-    private static final long HAlF_YEAR = 6 * ONE_MONTH;
 
     public static String formatTime(String dateTimeString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd/HH:mm", Locale.getDefault());
@@ -19,6 +16,8 @@ public class TimeUtil {
             Calendar calendar = Calendar.getInstance();
             int NoticeYear = Integer.parseInt(dateTimeString.substring(0, 4));
             int NowYear = calendar.get(Calendar.YEAR);
+            int NoticeDay = Integer.parseInt(dateTimeString.substring(8, 10));
+            int NowDay = calendar.get(Calendar.DAY_OF_MONTH);
             Date date = format.parse(dateTimeString);
             long currentTime = calendar.getTimeInMillis();
             calendar.setTime(date);
@@ -27,11 +26,11 @@ public class TimeUtil {
             if (timeDifference < ONE_HOUR) {
                 long minutes = timeDifference / ONE_MINUTE;
                 return minutes + "分钟前";
-            } else if (timeDifference > ONE_HOUR & timeDifference < ONE_DAY) {
+            } else if (timeDifference > ONE_HOUR & timeDifference < ONE_DAY & NoticeDay == NowDay) {
                 int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 return formatTimeDigit(hourOfDay) + ":" + formatTimeDigit(minute);
-            }  else if (timeDifference > ONE_DAY & !(timeDifference > 2 * ONE_DAY)) {
+            }  else if (NoticeDay < NowDay) {
                 int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 return "昨天 " + formatTimeDigit(hourOfDay) + ":" + formatTimeDigit(minute);

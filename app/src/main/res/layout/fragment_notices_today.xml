@@ -6,12 +6,23 @@
     android:orientation="vertical"
     android:background="#ffffff"
     >
-    <pro.phalfstudio.notice.NoticeRecyclerView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/todaySwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:id="@+id/TodayNoticeRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        >
+
+        <pro.phalfstudio.notice.NoticeRecyclerView
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/TodayNoticeRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 </LinearLayout>

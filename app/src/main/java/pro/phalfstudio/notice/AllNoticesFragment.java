@@ -129,6 +129,7 @@ public class AllNoticesFragment extends Fragment {
                 String url = getString(R.string.main_url);
                 LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
                 loadNetNotices.loadNotice(1,true);
+                refreshNotices(false, "");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

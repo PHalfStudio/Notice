@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -14,13 +15,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private MotionEvent event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,14 @@ public class SettingActivity extends AppCompatActivity {
                 return false;
             }
         });
+        Switch runToAmerica = findViewById(R.id.RunToAmerica);
+        runToAmerica.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                setSwitchAnimation(event,runToAmerica);
+                return false;
+            }
+        });
         //装饰性代码部分--end
         LinearLayout userPrivate = findViewById(R.id.userPrivate);
         userPrivate.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +58,8 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        ImageButton back = findViewById(R.id.SettingBack);
+        back.setOnClickListener((v)->{finish();});
 
 
     }

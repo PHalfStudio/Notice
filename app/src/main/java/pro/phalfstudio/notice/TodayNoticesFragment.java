@@ -11,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import pro.phalfstudio.notice.net.LoadNetNotices;
 import pro.phalfstudio.notice.utils.TimeUtil;
 
 public class TodayNoticesFragment extends Fragment {
+    List<LocalNotices> newLocal;
     private List<LocalNotices> localNotices;
     NoticeRecyclerViewAdapter adapter;
     private NoticeRecyclerView recyclerView;
@@ -52,8 +54,22 @@ public class TodayNoticesFragment extends Fragment {
                 String url = getString(R.string.main_url);
                 LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
                 loadNetNotices.loadNotice(1,true);
+                refreshNotices(false, "");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+    public void refreshNotices(boolean search, String searchString) {
+        if (search) {
+            newLocal = new DatabaseController(getContext()).searchNotice(searchString);
+            if(newLocal.size() == 0){
+                Toast.makeText(getContext(), "没有找到相关内容", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            newLocal = new DatabaseController(getContext()).findNoticeByDate(TimeUtil.getTodayDate());
+        }
+        localNotices.clear();
+        localNotices.addAll(newLocal);
+        adapter.notifyDataSetChanged();
     }
 }

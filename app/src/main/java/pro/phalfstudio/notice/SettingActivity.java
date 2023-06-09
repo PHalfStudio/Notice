@@ -3,6 +3,7 @@ package pro.phalfstudio.notice;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -15,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -22,11 +24,12 @@ import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
 
-
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        sharedPreferences = getSharedPreferences("notice_settings", MODE_PRIVATE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -34,11 +37,22 @@ public class SettingActivity extends AppCompatActivity {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         Switch openDeviceNotice = findViewById(R.id.OpenDeviceNotice);
+        boolean isNoticeServiceOn = sharedPreferences.getBoolean("NoticeService", false);
+        openDeviceNotice.setChecked(isNoticeServiceOn);
+
         openDeviceNotice.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 setSwitchAnimation(event,openDeviceNotice);
                 return false;
+            }
+        });
+        openDeviceNotice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("NoticeService", isChecked);
+                editor.apply();
             }
         });
         Switch runToAmerica = findViewById(R.id.RunToAmerica);

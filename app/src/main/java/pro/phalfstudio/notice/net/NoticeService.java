@@ -19,6 +19,6 @@ public interface NoticeService {
     @POST("api/notices")
     Call<NetBackNotices> searchNotice(@Body RequestBody request);
 
-    @POST("api/update")
-    Call<NetBackOneNotice> checkUpdate(@Body RequestBody request);
+    @POST("api/update/android")
+    Call<NetBackOneNotice> checkUpdate();
 }

@@ -38,4 +38,7 @@ public interface NoticeDao {
 
     @Query("UPDATE localnotices SET status=:status WHERE notice_id = :notice_id")
     void chanceStatusById(boolean status, String notice_id);
+
+    @Query("SELECT notice_id FROM localnotices ORDER BY notice_id DESC LIMIT 1")
+    int getLastNoticeID();
 }

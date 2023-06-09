@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pro.phalfstudio.notice.bean.NetBackNotices;
+import pro.phalfstudio.notice.bean.NetBackOneNotice;
 import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.database.LocalNotices;
 import retrofit2.Call;
@@ -112,5 +113,26 @@ public class LoadNetNotices {
                 }
             }
         });
+    }
+
+    public boolean getNetAndCompare(){
+        final Boolean[] cache = {false};
+        noticeService.getNewOneNotice().enqueue(new Callback<NetBackOneNotice>() {
+            @Override
+            public void onResponse(Call<NetBackOneNotice> call, Response<NetBackOneNotice> response) {
+                NetBackOneNotice back = response.body();
+                int newID = back.getData().getLatestNotice().getId();
+                int lastID = databaseController.getLastNoticeID();
+                if (newID > lastID) {
+                    cache[0] = true;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetBackOneNotice> call, Throwable t) {
+                System.out.println("fail");
+            }
+        });
+        return cache[0];
     }
 }

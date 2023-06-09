@@ -28,6 +28,7 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pro.phalfstudio.notice.adapter.NoticeRecyclerViewAdapter;
@@ -47,7 +48,7 @@ public class AllNoticesFragment extends Fragment {
     private static final TimeInterpolator ANIMATION_INTERPOLATOR = new DecelerateInterpolator();
     private SearchView searchView;
     private View searchBar;
-    private static final int ANIMATION_DURATION = 300; // 持续时间，单位为毫秒
+    private static final int ANIMATION_DURATION = 300; // 持续时间，单位为 毫秒
     int marginTop;
     boolean isSearchNow = false;
 
@@ -79,6 +80,8 @@ public class AllNoticesFragment extends Fragment {
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(false);
         searchView.clearFocus();
+        int noticeNum = databaseController.getAllNoticesNumber();
+        searchView.setQueryHint("搜索本地"+noticeNum+"条通知");
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +91,13 @@ public class AllNoticesFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                refreshNotices(true, query);
+                boolean isNum = query.matches("\\d+");
+                if(isNum){
+                    int searchNoticeID = Integer.parseInt(query);
+                    refreshNotices(true, "",searchNoticeID);
+                }else{
+                    refreshNotices(true, query,0);
+                }
                 isSearchNow = true;
                 return false;
             }
@@ -97,12 +106,12 @@ public class AllNoticesFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (newText.equals("")) {
                     isSearchNow = false;
-                    refreshNotices(false, "");
+                    refreshNotices(false, "",0);
                 }
                 return false;
             }
         });
-        refreshNotices(false, "");
+        refreshNotices(false, "",0);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -118,7 +127,7 @@ public class AllNoticesFragment extends Fragment {
                     //加载下一页
                     currentPage++;
                     loadNetNotices.loadNotice(currentPage,false);
-                    refreshNotices(false, "");
+                    refreshNotices(false, "",0);
                 }
             }
         });
@@ -129,15 +138,20 @@ public class AllNoticesFragment extends Fragment {
                 String url = getString(R.string.main_url);
                 LoadNetNotices loadNetNotices = new LoadNetNotices(url, getContext());
                 loadNetNotices.loadNotice(1,true);
-                refreshNotices(false, "");
+                refreshNotices(false, "",0);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
-    public void refreshNotices(boolean search, String searchString) {
+    public void refreshNotices(boolean search, String searchString , int NoticeID) {
         if (search) {
-            newLocal = new DatabaseController(getContext()).searchNotice(searchString);
+            if(NoticeID != 0){
+                newLocal = new ArrayList<>();
+                newLocal.add(new DatabaseController(getContext()).findNoticeById(NoticeID));
+            }else{
+                newLocal = new DatabaseController(getContext()).searchNotice(searchString);
+            }
             if(newLocal.size() == 0){
                 Toast.makeText(getContext(), "没有找到相关内容", Toast.LENGTH_SHORT).show();
             }

@@ -5,7 +5,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +23,9 @@ import pro.phalfstudio.notice.net.LoadNetNotices;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.WHITE);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        sharedPreferences = getApplication().getSharedPreferences("notice_settings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean("isNotification",false);
+        editor.apply();
+        //
+        if(sharedPreferences.getBoolean("NoticeService",false)){
+            Intent intent = new Intent(this, NoticeBackService.class);
+            startService(intent);
+        }
+        //
         String url = getString(R.string.main_url);
         DatabaseController databaseController = new DatabaseController(getBaseContext());
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getBaseContext());

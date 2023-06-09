@@ -111,6 +111,20 @@ public class DatabaseController {
         return cache.get()/100;
     }
 
+    public int getAllNoticesNumber(){
+        AtomicReference<Integer> cache = new AtomicReference<>();
+        Thread a = new Thread(() -> {
+            cache.set(database.noticeDao().allNoticeNum());
+        });
+        a.start();
+        try {
+            a.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return cache.get();
+    }
+
     public List<LocalNotices> searchNotice(String search) {
         AtomicReference<List<LocalNotices>> cache = new AtomicReference<>();
         Thread a = new Thread(() -> {
@@ -170,6 +184,14 @@ public class DatabaseController {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        return cache.get();
+    }
+
+    public int getLastNoticeID(){
+        AtomicInteger cache = new AtomicInteger();
+        Thread a = new Thread(() -> {
+            cache.set(database.noticeDao().getLastNoticeID());
+        });
         return cache.get();
     }
 }

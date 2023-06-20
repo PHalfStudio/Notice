@@ -17,7 +17,10 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import pro.phalfstudio.notice.adapter.NoticePagerAdapter;
+import pro.phalfstudio.notice.bean.Update;
 import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.net.CheckUpdate;
 import pro.phalfstudio.notice.net.LoadNetNotices;
@@ -42,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
         editor.putBoolean("isNotification",false);
         editor.apply();
-        //
+        //初始化Bugly
+        CrashReport.initCrashReport(getApplicationContext(), "5fe8557d90", true);
+        //检查更新
         if(sharedPreferences.getBoolean("NoticeService",false)){
             Intent intent = new Intent(this, NoticeBackService.class);
             startService(intent);
         }
         //
         String url = getString(R.string.main_url);
+        CheckUpdate check = new CheckUpdate(url,this,false);
+        check.checkAppUpdate();
         DatabaseController databaseController = new DatabaseController(getBaseContext());
         LoadNetNotices loadNetNotices = new LoadNetNotices(url, getBaseContext());
         if(databaseController.getAllNotices().size() == 0){

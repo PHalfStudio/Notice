@@ -22,6 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
+import pro.phalfstudio.notice.net.CheckUpdate;
+
 public class SettingActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
@@ -74,6 +78,15 @@ public class SettingActivity extends AppCompatActivity {
         });
         ImageButton back = findViewById(R.id.SettingBack);
         back.setOnClickListener((v)->{finish();});
+        LinearLayout checkUpdate = findViewById(R.id.CheckUpdateBtn);
+        String url = getString(R.string.main_url);
+        CheckUpdate check = new CheckUpdate(url,this,true);
+        checkUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                check.checkAppUpdate();
+            }
+        });
 
 
     }

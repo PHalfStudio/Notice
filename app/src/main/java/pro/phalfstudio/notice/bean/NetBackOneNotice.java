@@ -32,23 +32,32 @@ public class NetBackOneNotice {
     }
 
     public static class Data {
-        private int today;
-        private LatestNotice LatestNotice;
+        private int todayCount;
+        private int allCount;
+        private LatestNotice latestNotice;
 
-        public int getToday() {
-            return today;
+        public int getTodayCount() {
+            return todayCount;
         }
 
-        public void setToday(int today) {
-            this.today = today;
+        public void setTodayCount(int todayCount) {
+            this.todayCount = todayCount;
+        }
+
+        public int getAllCount() {
+            return allCount;
+        }
+
+        public void setAllCount(int allCount) {
+            this.allCount = allCount;
         }
 
         public LatestNotice getLatestNotice() {
-            return LatestNotice;
+            return latestNotice;
         }
 
-        public void setLatestNotice(LatestNotice LatestNotice) {
-            this.LatestNotice = LatestNotice;
+        public void setLatestNotice(LatestNotice latestNotice) {
+            this.latestNotice = latestNotice;
         }
 
         public static class LatestNotice {

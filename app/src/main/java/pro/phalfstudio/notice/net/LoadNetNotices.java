@@ -120,11 +120,14 @@ public class LoadNetNotices {
         noticeService.getNewOneNotice().enqueue(new Callback<NetBackOneNotice>() {
             @Override
             public void onResponse(Call<NetBackOneNotice> call, Response<NetBackOneNotice> response) {
-                NetBackOneNotice back = response.body();
-                int newID = back.getData().getLatestNotice().getId();
-                int lastID = databaseController.getLastNoticeID();
-                if (newID > lastID) {
-                    cache[0] = true;
+                if(response.isSuccessful()){
+                    System.out.println(response.body().getData().getLatestNotice().getId());
+                    NetBackOneNotice back = response.body();
+                    int newID = back.getData().getLatestNotice().getId();
+                    int lastID = databaseController.getLastNoticeID();
+                    if (newID > lastID) {
+                        cache[0] = true;
+                    }
                 }
             }
 

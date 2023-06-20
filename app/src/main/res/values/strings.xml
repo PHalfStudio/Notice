@@ -3,7 +3,8 @@
     <string name="src_url">http://oa.hzjxy.org.cn:809/api/</string>
     <string name="app_name">Notice2.0</string>
     <string name="copyright">Copyright ©PHalfStudio</string>
-    <string name="version_code">Dev 2.23.6.3</string>
+    <string name="version_code">Dev 2.23.6.20</string>
+    <string name="number_version_code">2230620</string>
     <string name="check_update">检查更新</string>
     <string name="user_private">隐私政策</string>
     <string name="run_to_america">留洋模式</string>

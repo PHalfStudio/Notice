@@ -4,6 +4,7 @@ import okhttp3.RequestBody;
 
 import pro.phalfstudio.notice.bean.NetBackNotices;
 import pro.phalfstudio.notice.bean.NetBackOneNotice;
+import pro.phalfstudio.notice.bean.Update;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,6 +20,7 @@ public interface NoticeService {
     @POST("api/notices")
     Call<NetBackNotices> searchNotice(@Body RequestBody request);
 
-    @POST("api/update/android")
-    Call<NetBackOneNotice> checkUpdate();
+    @GET("api/version/android")
+    Call<Update> checkUpdate();
+
 }

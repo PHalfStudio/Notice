@@ -1,7 +1,7 @@
 <resources>
     <string name="main_url">https://www.dianstudios.cn:8091/</string>
     <string name="src_url">http://oa.hzjxy.org.cn:809/api/</string>
-    <string name="app_name">Notice2.0</string>
+    <string name="app_name">·Notice·</string>
     <string name="copyright">Copyright ©PHalfStudio</string>
     <string name="version_code">Dev 2.23.6.20</string>
     <string name="number_version_code">22306200</string>

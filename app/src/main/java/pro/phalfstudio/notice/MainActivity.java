@@ -5,10 +5,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -29,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-
+    private Boolean isDialogShow;
+    private Boolean isDialogShowing;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("isNotification",false);
         editor.apply();
         //初始化Bugly
-        CrashReport.initCrashReport(getApplicationContext(), "5fe8557d90", true);
+        CrashReport.initCrashReport(getApplicationContext(), "5fe8557d90", false);
+        //隐私政策
+        isDialogShow = sharedPreferences.getBoolean("isDialogShow",true);
+        isDialogShowing = false;
+        showUserAgreeDialog();
         //检查更新
         if(sharedPreferences.getBoolean("NoticeService",false)){
             Intent intent = new Intent(this, NoticeBackService.class);
@@ -114,5 +122,37 @@ public class MainActivity extends AppCompatActivity {
             redLine.setX(currentX);
         });
         animator.start();
+    }
+    private void showUserAgreeDialog(){
+        if(isDialogShow & !isDialogShowing){
+            isDialogShowing = true;
+            Intent intent = new Intent(this, WebActivity.class);
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("用户协议")
+                    .setMessage("使用本应用前，请阅读并同意我们的用户协议")
+                    .setCancelable(false)
+                    .setNeutralButton("用户协议" , (dialog3, which) -> {
+                        startActivity(intent);
+                        isDialogShowing = false;
+                        dialog3.dismiss();
+                    })
+                    .setPositiveButton("同意", (dialog1, which) -> {
+                        editor.putBoolean("isDialogShow",false);
+                        editor.apply();
+                        isDialogShow = false;
+                        dialog1.dismiss();
+                    })
+                    .setNegativeButton("退出", (dialog2, which) -> {
+                        finish();
+                    })
+                    .create();
+            dialog.show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showUserAgreeDialog();
     }
 }

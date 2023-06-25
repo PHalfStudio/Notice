@@ -1,11 +1,6 @@
 package pro.phalfstudio.notice;
 
-import static android.view.FrameMetrics.ANIMATION_DURATION;
-
-import android.animation.Animator;
 import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,13 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,7 +26,6 @@ import pro.phalfstudio.notice.adapter.NoticeRecyclerViewAdapter;
 import pro.phalfstudio.notice.controller.DatabaseController;
 import pro.phalfstudio.notice.database.LocalNotices;
 import pro.phalfstudio.notice.net.LoadNetNotices;
-import pro.phalfstudio.notice.utils.DisplayUtil;
 
 public class AllNoticesFragment extends Fragment {
     NoticeRecyclerViewAdapter adapter;

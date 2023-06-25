@@ -65,9 +65,11 @@ public class CheckUpdate {
                         appLongVersion = context.getString(R.string.number_version_code);
                         if (Integer.parseInt(longVersion) > Integer.parseInt(appLongVersion)) {
                             int i = Integer.parseInt(longVersion.substring(7));
+                            System.out.println(i);
                             AlertDialog dialog = new AlertDialog.Builder(context)
                                     .setTitle(appVersion+"版本更新")
                                     .setMessage("检测到新版本！更新信息如下："+description+"\n\n更新时间："+date)
+                                    .setCancelable(false)
                                     .setPositiveButton("更新", (dialog1, which) -> {
                                         Intent openIntent = new Intent(Intent.ACTION_VIEW);
                                         openIntent.setData(Uri.parse(dlUrl));

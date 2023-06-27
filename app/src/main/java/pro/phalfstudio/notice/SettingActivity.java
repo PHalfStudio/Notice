@@ -8,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -73,6 +74,8 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this,WebActivity.class);
+                intent.putExtra("title","用户协议");
+                intent.putExtra("url","https://notice.phalfstudio.pro/user_argeement/");
                 startActivity(intent);
             }
         });
@@ -87,7 +90,16 @@ public class SettingActivity extends AppCompatActivity {
                 check.checkAppUpdate();
             }
         });
-
+        LinearLayout feedback = findViewById(R.id.userFeedback);
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra("title","意见反馈");
+        intent.putExtra("url","https://wj.qq.com/s2/12654690/777b/");
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
 
     }
     final float thumbScale = 1.2f; // thumb 放大的比例

@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TodayNoticeBtn"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="-40dp"
+                    android:layout_marginTop="-43dp"
                     android:layout_toEndOf="@+id/TodayNoticeBtn"
                     android:text="@string/main_title_all_notify"
                     android:textColor="#707070"

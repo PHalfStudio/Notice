@@ -3,9 +3,10 @@
     <string name="src_url">http://oa.hzjxy.org.cn:809/api/</string>
     <string name="app_name">·Notice·</string>
     <string name="copyright">Copyright ©PHalfStudio</string>
-    <string name="version_code">Dev 2.23.6.25</string>
-    <string name="number_version_code">20000000</string>
+    <string name="version_code">V2.23.6.27_D</string>
+    <string name="number_version_code">22306271</string>
     <string name="check_update">检查更新</string>
+    <string name="feedback">意见反馈</string>
     <string name="user_private">隐私政策</string>
     <string name="run_to_america">出国模式</string>
     <string name="run_to_america_details">链接国外服务器获取新通知</string>

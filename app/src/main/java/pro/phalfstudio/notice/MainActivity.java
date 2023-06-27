@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         if(isDialogShow & !isDialogShowing){
             isDialogShowing = true;
             Intent intent = new Intent(this, WebActivity.class);
+            intent.putExtra("title","用户协议");
+            intent.putExtra("url","https://notice.phalfstudio.pro/user_argeement/");
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("用户协议")
                     .setMessage("使用本应用前，请阅读并同意我们的用户协议")

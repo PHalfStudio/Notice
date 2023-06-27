@@ -92,6 +92,8 @@ public class CheckUpdate {
                         } else {
                             alertNormal.show();
                         }
+                    }else if (userCheck){
+                        Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
                     }
 
                 }

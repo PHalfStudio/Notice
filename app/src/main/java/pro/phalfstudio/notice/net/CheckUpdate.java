@@ -76,6 +76,7 @@ public class CheckUpdate {
                                         context.startActivity(openIntent);
                                     })
                                     .setNegativeButton("取消", (dialog2, which) -> {
+                                        System.out.println(i);
                                         if(i == 0){
                                             dialog2.dismiss();
                                         }else if(i == 1){
@@ -94,6 +95,7 @@ public class CheckUpdate {
                             AlertDialog dialog = new AlertDialog.Builder(context)
                                     .setTitle(appVersion+"版本更新")
                                     .setMessage("检测到新版本！更新信息如下："+"\n\n"+description+"\n\n更新时间："+date)
+                                    .setCancelable(false)
                                     .setPositiveButton("更新", (dialog1, which) -> {
                                         Intent openIntent = new Intent(Intent.ACTION_VIEW);
                                         openIntent.setData(Uri.parse(dlUrl));
